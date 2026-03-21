@@ -1,4 +1,10 @@
 # velocity-setup POLSKI
+
+![Minecraft](https://img.shields.io/badge/Minecraft-Network-green?style=for-the-badge)
+![Proxy](https://img.shields.io/badge/Proxy-Velocity-blue?style=for-the-badge)
+![Java](https://img.shields.io/badge/Java-17+-orange?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Stable-brightgreen?style=for-the-badge)
+
 > Kompletny poradnik konfiguracji **Velocity** na VPS / hostingu pod sieć serwerów Minecraft
 
 ---
@@ -27,23 +33,23 @@ W praktyce:
 * proxy autoryzuje gracza
 * proxy przekierowuje go na odpowiedni serwer
 
-👉 Backend (Paper/Spigot) nigdy nie powinien być dostępny publicznie.
+→ Backend (Paper/Spigot) nigdy nie powinien być dostępny publicznie.
 
 ---
 
 ## 💡 Dlaczego warto używać Velocity?
 
-✔️ dużo lepsza wydajność niż BungeeCord
-✔️ nowoczesne zabezpieczenia (forwarding + secret)
-✔️ backendy są odseparowane (większe bezpieczeństwo)
-✔️ wspiera nowe wersje Minecraft
-✔️ aktywnie rozwijany projekt
+- ✔️ dużo lepsza wydajność niż BungeeCord  
+- ✔️ nowoczesne zabezpieczenia (forwarding + secret)  
+- ✔️ backendy są odseparowane (większe bezpieczeństwo)  
+- ✔️ wspiera nowe wersje Minecraft  
+- ✔️ aktywnie rozwijany projekt  
 
 Krótko: **standard w aktualnych sieciach Minecraft**
 
 ---
 
-## ⚙️ Wymagania
+## Wymagania
 
 * Java 17+
 * VPS lub hosting (np. Pterodactyl)
@@ -52,9 +58,9 @@ Krótko: **standard w aktualnych sieciach Minecraft**
 
 ---
 
-## 📥 Instalacja (VPS / hosting)
+## Instalacja (VPS / hosting)
 
-### 📁 Struktura plików
+### Struktura plików
 
 ```
 /server/
@@ -63,9 +69,7 @@ Krótko: **standard w aktualnych sieciach Minecraft**
   ├── boxpvp/     ← backend
 ```
 
----
-
-### 🌐 Hosting (np. Pterodactyl)
+### Hosting (np. Pterodactyl)
 
 * Velocity = osobny serwer
 * Każdy backend = osobna instancja
@@ -77,9 +81,7 @@ Krótko: **standard w aktualnych sieciach Minecraft**
 
 ⚠️ Backendów NIE wystawiasz publicznie
 
----
-
-### 🖥️ VPS (Linux)
+### VPS (Linux)
 
 Uruchomienie proxy:
 
@@ -98,15 +100,13 @@ Plik:
 velocity.toml
 ```
 
----
-
-### 🔑 Forwarding (NAJWAŻNIEJSZE)
+### Forwarding (NAJWAŻNIEJSZE)
 
 ```toml
 player-info-forwarding-mode = "modern"
 ```
 
-### 🧠 Co to właściwie robi?
+### Co to właściwie robi?
 
 Velocity przekazuje backendowi dane gracza:
 
@@ -114,27 +114,23 @@ Velocity przekazuje backendowi dane gracza:
 * IP
 * skin
 
-Ale nie „na słowo” — tylko:
+Ale nie „na słowo” - tylko:
 
 * podpisane (MAC)
 * zabezpieczone przez secret
 
 → Dzięki temu nikt nie może się podszyć pod gracza
 
----
-
-### 🔐 Secret (zabezpieczenie)
+### Secret (zabezpieczenie)
 
 ```toml
 forwarding-secret-file = "forwarding.secret"
 ```
 
-➡️ Plik wygeneruje się automatycznie
-➡️ MUSI być identyczny w backendzie
+- → Plik wygeneruje się automatycznie
+- → MUSI być identyczny w backendzie
 
----
-
-### 🌐 Dodanie backendów
+### Dodanie backendów
 
 ```toml
 [servers]
@@ -142,12 +138,10 @@ lobby = "IP:25566"
 boxpvp = "IP:25567"
 ```
 
-📌 Jeśli masz VPS → możesz użyć `127.0.0.1`
-📌 Jeśli hosting → użyj IP z panelu
+→ Jeśli masz VPS → możesz użyć `127.0.0.1`
+→ Jeśli hosting → użyj IP z panelu
 
----
-
-### 🚪 Serwer startowy
+### Serwer startowy
 
 ```toml
 try = [
@@ -157,21 +151,17 @@ try = [
 
 ---
 
-## 🔗 Jak działa podłączenie (krok po kroku)
+## ⚡ Jak działa podłączenie (krok po kroku)
 
 To jest ważne, bo większość problemów wynika z niezrozumienia.
 
----
-
-### 1️⃣ Gracz łączy się z proxy
+### 1. Gracz łączy się z proxy
 
 * wpisuje IP serwera
 * trafia do Velocity
 * Velocity robi autoryzację
 
----
-
-### 2️⃣ Tworzenie danych gracza
+### 2. Tworzenie danych gracza
 
 Velocity przygotowuje:
 
@@ -181,9 +171,7 @@ Velocity przygotowuje:
 
 Dane są podpisane i zabezpieczone.
 
----
-
-### 3️⃣ Połączenie z backendem
+### 3. Połączenie z backendem
 
 Velocity łączy się z backendem i wysyła dane.
 
@@ -193,21 +181,15 @@ Backend:
 * jeśli OK → wpuszcza gracza
 * jeśli NIE → `not forwarded`
 
----
-
-### 4️⃣ Przekierowanie
+### 4. Przekierowanie
 
 Gracz trafia na:
 
 * serwer z `try` (np. lobby)
 
----
-
 ## ⚙️ Konfiguracja backend (Paper)
 
----
-
-### 🆕 Nowe wersje (paper-global.yml)
+### Nowe wersje (paper-global.yml)
 
 ```yaml
 proxies:
@@ -217,9 +199,7 @@ proxies:
     secret: "TU_SECRET"
 ```
 
----
-
-### 🧓 Starsze wersje (paper.yml)
+### Starsze wersje (paper.yml)
 
 ```yaml
 settings:
@@ -229,19 +209,15 @@ settings:
     secret: "TU_SECRET"
 ```
 
----
-
-### 📄 server.properties
+### server.properties
 
 ```properties
 online-mode=false
 ```
 
-👉 Proxy przejmuje autoryzację czyli backend nie może tego robić
+→ Proxy przejmuje autoryzację czyli backend nie może tego robić
 
----
-
-### ⚠️ Dodatkowo
+### Dodatkowo
 
 ```yaml
 # spigot.yml
@@ -255,13 +231,13 @@ settings:
 
 Jeśli tego nie zrobisz to ktoś ominie proxy.
 
-✔️ firewall (blokada backendów)
-✔️ backend dostępny tylko dla proxy
-✔️ brak publicznego IP backendów
+- ✔️ firewall (blokada backendów)
+- ✔️ backend dostępny tylko dla proxy
+- ✔️ brak publicznego IP backendów
 
 ---
 
-## ▶️ Uruchamianie
+## Uruchamianie
 
 Kolejność ma znaczenie:
 
@@ -271,12 +247,12 @@ Kolejność ma znaczenie:
 
 ---
 
-## 🧪 Test czy działa
+## Test czy działa
 
-✔️ możesz wejść przez proxy
-✔️ trafiasz na lobby
-✔️ `/server boxpvp` działa
-✔️ NIE możesz wejść na backend bezpośrednio
+- ✔️ możesz wejść przez proxy
+- ✔️ trafiasz na lobby
+- ✔️ `/server boxpvp` działa
+- ✔️ NIE możesz wejść na backend bezpośrednio
 
 → Jeśli wszystko działa → masz dobrze skonfigurowane
 
@@ -284,27 +260,24 @@ Kolejność ma znaczenie:
 
 ## ❌ Najczęstsze błędy
 
-### 🔴 Player info forwarding failed
+### Player info forwarding failed
 
-➡️ zły secret
+- → zły secret
 
----
 
-### 🔴 Disconnected: not forwarded
+### Disconnected: not forwarded
 
-➡️ backend nie ma velocity w configu
+- → backend nie ma velocity w configu
 
----
 
-### 🔴 Backend działa bez proxy
+### Backend działa bez proxy
 
-➡️ brak firewalla
+- → brak firewalla
 
----
 
-### 🔴 Nie łączy z backendem
+### Nie łączy z backendem
 
-➡️ zły IP / port
+- → zły IP / port
 
 ---
 
@@ -322,27 +295,25 @@ Kolejność ma znaczenie:
 
 ## 📎 Dodatkowe informacje
 
-* Velocity NIE zastępuje backendu — to tylko proxy
+* Velocity NIE zastępuje backendu - to tylko proxy
 * Każdy backend to osobny serwer Minecraft
 * Komunikacja między serwerami wymaga pluginów (np. messaging / Redis)
 
 ---
 
-## 👤 Autor
+## Autor
 
 **noisy144 / mikusiek144**
 
 * GitHub: https://github.com/mikusiek144
 * Discord: noisy144
 
----
-
-## ⭐ Wsparcie
+## Wsparcie
 
 Jeśli poradnik pomógł:
 
-* ⭐ zostaw gwiazdkę na repo
-* 🔁 udostępnij dalej
-* 💬 masz problem? napisz na Discord
+*  zostaw gwiazdkę na repo
+*  udostępnij dalej
+*  masz problem? napisz na Discord
 
 ---
