@@ -19,7 +19,7 @@ Velocity (proxy)
 Lobby / BoxPvP / Survival (backends)
 ```
 
-Velocity acts as an intermediary — the player connects only to it, and it handles everything else.
+Velocity acts as an intermediary - the player connects only to it, and it handles everything else.
 
 ---
 
