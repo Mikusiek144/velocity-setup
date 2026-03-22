@@ -5,13 +5,13 @@
 ![Java](https://img.shields.io/badge/Java-17+-orange?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Stable-brightgreen?style=for-the-badge)
 
-> Vollständige Anleitung zur Konfiguration von **Velocity** auf einem VPS / Hosting für ein Minecraft-Servernetzwerk
+> Vollständige Anleitung zur Einrichtung von **Velocity** auf einem VPS oder Hosting für ein Minecraft-Servernetzwerk
 
 ---
 
 ## 📡 Architektur (so funktioniert es)
 
-```
+```id="w1v9kq"
 Spieler
   ↓
 Velocity (Proxy)
@@ -19,7 +19,7 @@ Velocity (Proxy)
 Lobby / BoxPvP / Survival (Backends)
 ```
 
-Velocity fungiert als Vermittler, d. h. der Spieler verbindet sich nur mit ihm, und er kümmert sich um den Rest.
+Velocity fungiert als Vermittler, das heißt: Der Spieler verbindet sich nur mit dem Proxy, und dieser übernimmt den Rest.
 
 ---
 
@@ -33,19 +33,19 @@ In der Praxis:
 * Der Proxy authentifiziert den Spieler
 * Der Proxy leitet ihn an den entsprechenden Server weiter
 
-→ Das Backend (Paper/Spigot) sollte niemals öffentlich zugänglich sein.
+→ Das Backend (Paper/Spigot) sollte niemals öffentlich zugänglich sein
 
 ---
 
 ## 💡 Warum lohnt es sich, Velocity zu nutzen?
 
-- ✔️ deutlich bessere Leistung als BungeeCord  
-- ✔️ moderne Sicherheitsmaßnahmen (Forwarding + Secret)  
-- ✔️ Backends sind getrennt (höhere Sicherheit)  
-- ✔️ unterstützt neue Minecraft-Versionen  
-- ✔️ aktiv weiterentwickeltes Projekt  
+* ✔️ deutlich bessere Leistung als BungeeCord
+* ✔️ moderne Sicherheitsmechanismen (Forwarding + Secret)
+* ✔️ getrennte Backends (höhere Sicherheit)
+* ✔️ Unterstützung neuer Minecraft-Versionen
+* ✔️ aktiv weiterentwickeltes Projekt
 
-Kurz gesagt: **der Standard in aktuellen Minecraft-Netzwerken**
+Kurz gesagt: **der Standard für moderne Minecraft-Netzwerke**
 
 ---
 
@@ -62,7 +62,7 @@ Kurz gesagt: **der Standard in aktuellen Minecraft-Netzwerken**
 
 ### Dateistruktur
 
-```
+```id="x9c2lm"
 /server/
   ├── velocity/   ← Proxy
   ├── lobby/      ← Backend
@@ -72,7 +72,7 @@ Kurz gesagt: **der Standard in aktuellen Minecraft-Netzwerken**
 ### Hosting (z. B. Pterodactyl)
 
 * Velocity = separater Server
-* Jedes Backend = separate Instanz
+* Jedes Backend = eigene Instanz
 
 **Ports:**
 
@@ -85,7 +85,7 @@ Kurz gesagt: **der Standard in aktuellen Minecraft-Netzwerken**
 
 Proxy starten:
 
-```bash
+```bash id="t7n4pe"
 screen -S velocity
 java -Xms1G -Xmx1G -jar velocity.jar
 ```
@@ -96,56 +96,56 @@ java -Xms1G -Xmx1G -jar velocity.jar
 
 Datei:
 
-```
+```id="g3p8zr"
 velocity.toml
 ```
 
 ### Weiterleitung (AM WICHTIGSTEN)
 
-```toml
-player-info-forwarding-mode = „modern“
+```toml id="k6q1as"
+player-info-forwarding-mode = "modern"
 ```
 
-### Was bewirkt das eigentlich?
+### Was bedeutet das?
 
-Velocity übermittelt dem Backend die Daten des Spielers:
+Velocity übermittelt dem Backend die Spielerdaten:
 
 * UUID
-* IP
+* IP-Adresse
 * Skin
 
-Aber nicht „auf das Wort“ – sondern:
+Aber nicht ungesichert, sondern:
 
 * signiert (MAC)
-* durch ein Secret gesichert
+* durch ein Secret geschützt
 
-→ Dadurch kann sich niemand als der Spieler ausgeben
+→ Dadurch kann sich niemand als Spieler ausgeben
 
 ### Secret (Sicherheit)
 
-```toml
-forwarding-secret-file = „forwarding.secret“
+```toml id="m2b7cx"
+forwarding-secret-file = "forwarding.secret"
 ```
 
-- → Die Datei wird automatisch generiert
-- → MUSS im Backend identisch sein
+* → Die Datei wird automatisch generiert
+* → MUSS im Backend identisch sein
 
 ### Backends hinzufügen
 
-```toml
+```toml id="z8v5hd"
 [servers]
-lobby = „IP:25566“
-boxpvp = „IP:25567“
+lobby = "IP:25566"
+boxpvp = "IP:25567"
 ```
 
-→ Wenn du einen VPS hast → kannst du `127.0.0.1` verwenden
-→ Wenn du Hosting nutzt → verwende die IP aus dem Control Panel
+→ Bei VPS kannst du `127.0.0.1` verwenden
+→ Bei Hosting nutze die IP aus dem Control Panel
 
 ### Startserver
 
-```toml
+```toml id="r4n6yu"
 try = [
-  „lobby“
+  "lobby"
 ]
 ```
 
@@ -153,7 +153,7 @@ try = [
 
 ## ⚡ So funktioniert die Verbindung (Schritt für Schritt)
 
-Das ist wichtig, da die meisten Probleme auf Missverständnisse zurückzuführen sind.
+Das ist wichtig, da die meisten Probleme durch Missverständnisse entstehen.
 
 ### 1. Der Spieler verbindet sich mit dem Proxy
 
@@ -161,65 +161,67 @@ Das ist wichtig, da die meisten Probleme auf Missverständnisse zurückzuführen
 * gelangt zu Velocity
 * Velocity führt die Authentifizierung durch
 
-### 2. Erstellen der Spielerdaten
+### 2. Erstellung der Spielerdaten
 
 Velocity bereitet vor:
 
 * UUID
-* IP
+* IP-Adresse
 * Profil (Skin)
 
-Die Daten sind signiert und gesichert.
+Die Daten sind signiert und gesichert
 
 ### 3. Verbindung zum Backend
 
-Velocity verbindet sich mit dem Backend und sendet die Daten.
+Velocity verbindet sich mit dem Backend und übermittelt die Daten
 
 Backend:
 
-* überprüft `secret`
-* wenn OK → lässt den Spieler herein
-* wenn NEIN → `not forwarded`
+* überprüft das `secret`
+* wenn korrekt → Spieler wird zugelassen
+* wenn nicht → `not forwarded`
 
 ### 4. Weiterleitung
 
-Der Spieler gelangt zu:
+Der Spieler wird weitergeleitet zu:
 
-* einem Server mit `try` (z. B. Lobby)
+* einem Server aus `try` (z. B. Lobby)
+
+---
 
 ## ⚙️ Backend-Konfiguration (Paper)
 
 ### Neue Versionen (paper-global.yml)
 
-```yaml
+```yaml id="y5k9td"
 proxies:
   velocity:
     enabled: true
     online-mode: true
-    secret: „TU_SECRET“
+    secret: "TU_SECRET"
 ```
 
 ### Ältere Versionen (paper.yml)
 
-```yaml
+```yaml id="p1w7nr"
 settings:
   velocity-support:
     enabled: true
     online-mode: true
-    secret: „TU_SECRET“
+    secret: "TU_SECRET"
 ```
 
 ### server.properties
 
-```properties
+```properties id="c8j2qx"
 online-mode=false
 ```
 
-→ Der Proxy übernimmt die Authentifizierung, d. h. das Backend darf dies nicht tun
+→ Die Authentifizierung übernimmt der Proxy, daher darf das Backend dies nicht tun
 
 ### Zusätzlich
 
-```yaml
+```yaml id="l3v6hs"
 # spigot.yml
 settings:
   bungeecord: false
@@ -229,11 +231,11 @@ settings:
 
 ## 🔒 Sicherheitsmaßnahmen (MUST HAVE)
 
-Wenn du dies nicht tust, wird jemand den Proxy umgehen.
+Wenn du das nicht einstellst, kann der Proxy umgangen werden.
 
-- ✔️ Firewall (Sperrung der Backends)
-- ✔️ Backend nur für den Proxy zugänglich
-- ✔️ Keine öffentliche IP-Adresse der Backends
+* ✔️ Firewall (Backends blockieren)
+* ✔️ Backend nur für den Proxy erreichbar
+* ✔️ Keine öffentliche IP der Backends
 
 ---
 
@@ -243,18 +245,18 @@ Die Reihenfolge ist wichtig:
 
 1. Backends (Paper)
 2. Velocity
-3. Du loggst dich über den Proxy ein
+3. Verbindung über den Proxy herstellen
 
 ---
 
-## Testen, ob es funktioniert
+## Testen, ob alles funktioniert
 
-- ✔️ Du kannst dich über den Proxy einloggen
-- ✔️ Du gelangst in die Lobby
-- ✔️ `/server boxpvp` funktioniert
-- ✔️ Du kannst dich NICHT direkt auf dem Backend anmelden
+* ✔️ Login über den Proxy möglich
+* ✔️ Weiterleitung in die Lobby funktioniert
+* ✔️ `/server boxpvp` funktioniert
+* ✔️ Direktes Verbinden mit dem Backend ist NICHT möglich
 
-→ Wenn alles funktioniert → hast du alles richtig konfiguriert
+→ Wenn alles passt → ist die Konfiguration korrekt
 
 ---
 
@@ -262,22 +264,19 @@ Die Reihenfolge ist wichtig:
 
 ### Player info forwarding failed
 
-- → falscher Secret
-
+* → falsches Secret
 
 ### Disconnected: not forwarded
 
-- → Backend hat kein Velocity in der Konfiguration
-
+* → Velocity nicht im Backend konfiguriert
 
 ### Backend läuft ohne Proxy
 
-- → keine Firewall
-
+* → keine Firewall eingerichtet
 
 ### Keine Verbindung zum Backend
 
-- → falsche IP / Port
+* → falsche IP oder falscher Port
 
 ---
 
@@ -285,7 +284,7 @@ Die Reihenfolge ist wichtig:
 
 * [ ] Secret ist identisch
 * [ ] Backend hat `online-mode=false`
-* [ ] Velocity hat `modern`
+* [ ] Velocity nutzt `modern`
 * [ ] Backend läuft
 * [ ] Port ist korrekt
 * [ ] Firewall blockiert den Proxy nicht
@@ -296,8 +295,8 @@ Die Reihenfolge ist wichtig:
 ## 📎 Weitere Informationen
 
 * Velocity ersetzt das Backend NICHT – es ist nur ein Proxy
-* Jedes Backend ist ein separater Minecraft-Server
-* Die Kommunikation zwischen den Servern erfordert Plugins (z. B. Messaging / Redis)
+* Jedes Backend ist ein eigener Minecraft-Server
+* Kommunikation zwischen Servern erfordert Plugins (z. B. Messaging / Redis)
 
 ---
 
@@ -312,8 +311,7 @@ Die Reihenfolge ist wichtig:
 
 Wenn dir dieser Leitfaden geholfen hat:
 
-*  Gib dem Beitrag eine Bewertung
-*  Teile ihn
-*  Hast du ein Problem? Schreib uns auf Discord
-
+* Gib einen Stern ⭐
+* Teile ihn
+* Hast du ein Problem? Schreib auf Discord
 ---
