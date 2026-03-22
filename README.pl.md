@@ -294,7 +294,7 @@ Kolejność ma znaczenie:
 
 ## 📎 Dodatkowe informacje
 
-* Velocity NIE zastępuje backendu — to tylko proxy
+* Velocity NIE zastępuje backendu - to tylko proxy
 * każdy backend to osobny serwer Minecraft
 * komunikacja między serwerami wymaga pluginów (np. messaging / Redis)
 
